@@ -1,0 +1,23 @@
+{
+  "name": "dynamodbproject",
+  "version": "1.0.0",
+  "description": "An interface to dynamo db",
+  "main": "index.ts",
+  "scripts": {
+    "test": "mocha -r ts-node/register ./src/tests/*.ts"
+  },
+  "author": "Sidney Armitage",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/chai": "^4.1.2",
+    "@types/mocha": "^2.2.48",
+    "@types/node": "^9.4.2",
+    "chai": "^4.1.2",
+    "mocha": "^5.0.0",
+    "ts-node": "^4.1.0",
+    "typescript": "^2.7.1"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.189.0"
+  }
+}
