@@ -1,0 +1,41 @@
+Database:
+  ☐ proxy
+  ☐ endpoint
+  ☐ auth
+
+database Major features:
+  ☐ BatchGetItem
+  ☐ BatchWriteItem
+  ☐ CreateBackup
+  ☐ CreateGlobalTable
+  ☐ CreateTable
+  ☐ DeleteBackup
+  ☐ DeleteItem
+  ☐ DeleteTable
+  ☐ DescribeBackup
+  ☐ DescribeContinuousBackups
+  ☐ DescribeGlobalTable
+  ☐ DescribeLimits
+  ☐ DescribeTable
+  ☐ DescribeTimeToLive
+  ☐ GetItem
+  ☐ ListBackups
+  ☐ ListGlobalTables
+  ☐ ListTables
+  ☐ ListTagsOfResource
+  ☐ PutItem
+  ☐ Query
+  ☐ RestoreTableFromBackup
+  ☐ Scan
+  ☐ TagResource
+  ☐ UntagResource
+  ☐ UpdateGlobalTable
+  ☐ UpdateItem
+  ☐ UpdateTable
+  ☐ UpdateTimeToLive
+
+Querying Methods:
+  ☐ Execute
+  ☐ ExecuteLimit
+
+Communication:
