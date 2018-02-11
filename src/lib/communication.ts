@@ -2,30 +2,28 @@
  * This file will handle the communications between our 
  * application and typescript.
  * 
- * Sign the request using the hash whih the AWS4-HMAC-SHA256 sig
- * https://docs.aws.amazon.com/general/latest/gr/sigv4_signing.html
- * 
  */
 
 import * as http from 'http'
 import * as https from 'https'
 import * as aws4 from 'aws4'
+import { error } from 'util'
 
 const api_target = 'DynamoDB_20120810'
 const service = 'dynamodb'
 
 export interface IawsCredentials {
-  accessKeyId: string,
+  accessKeyId: string
   secretAccessKey: string
 }
 
 export interface IHost {
-  region: string,
+  region: string
   domain: string
 }
 
 export interface ICommunicationOptions {
-  awsCredentials?: IawsCredentials,
+  awsCredentials?: IawsCredentials
   host: string | IHost
   method?: string
 }
@@ -33,6 +31,7 @@ export interface ICommunicationOptions {
 interface IAwsOptions {
   host: string
   path: string
+  port: number
   method: string
   headers: any
   body: string
@@ -44,7 +43,9 @@ export class Communications {
   private isHTTPs: boolean
 
   constructor (options: ICommunicationOptions) {
-    this.options = {} as IAwsOptions
+    this.options = {
+      headers: {} as any
+    } as IAwsOptions
     if(typeof options.host === 'string'){
       this.isHTTPs = options.host.match(/https\:\/\//) !== null
       let host = options
@@ -71,7 +72,6 @@ export class Communications {
     this.options.method = options.method ? options.method : 'POST'
     this.options.body = '{}'
     this.options.headers['Content-Type'] = 'application/x-amz-json-1.0'
-    this.options.headers['X-Amz-Target'] = 'DynamoDB_20120810.ListTables'
   }
 
   public getHost() {
@@ -86,8 +86,10 @@ export class Communications {
     return this.isHTTPs
   }
 
-  public request(): Promise<JSON>{
+  public request(operation: string, data: JSON): Promise<JSON>{
+    this.options.headers['X-Amz-Target'] = 'DynamoDB_20120810.' + operation
     return new Promise<JSON>((resolve, reject) => {
+      this.options.body = JSON.stringify(data)
       let req: http.ClientRequest
       aws4.sign(this.options)
       if (this.isHTTPs) {
@@ -107,5 +109,17 @@ export class Communications {
 }
 
 function response(res: http.IncomingMessage, resolve: (out: JSON) => void, reject: (out: any) => void) {
+  let data = ''
 
+  res.on('data', (chunk) => {
+    data += chunk
+  })
+
+  res.on('end', ()  => {
+    try {
+      resolve(JSON.parse(data))
+    } catch(error) {
+      reject(error)
+    }
+  })
 }

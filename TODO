@@ -1,9 +1,31 @@
 Database:
   ☐ proxy
-  ☐ endpoint
+  ✔ endpoint @done(18-02-10 16:13)
+  ☐ add communication class
   ☐ auth
 
-database Major features:
+Base_query:
+  contains:
+    ☐ communication
+    ☐ table name
+
+Querying Methods:
+☐ Execute
+☐ ExecuteLimit
+
+Communication:
+☐ build
+☐ setup
+☐ request reject
+☐ complete request and return JSON object
+☐ proxy
+☐ add port
+
+Tests:
+☐ run only if dynamo is running
+☐ run only if proxy is running
+
+Database Major features:
   ☐ BatchGetItem
   ☐ BatchWriteItem
   ☐ CreateBackup
@@ -33,9 +55,3 @@ database Major features:
   ☐ UpdateItem
   ☐ UpdateTable
   ☐ UpdateTimeToLive
-
-Querying Methods:
-  ☐ Execute
-  ☐ ExecuteLimit
-
-Communication:

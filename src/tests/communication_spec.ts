@@ -1,5 +1,14 @@
 import { expect } from 'chai'
+import * as http from 'http'
+import * as net from 'net'
 import * as communication from '../lib/communication'
+import { Communications } from '../lib/communication';
+
+const local_DB_host = '127.0.0.1'
+const local_DB_port = 8000
+
+const proxy_host = '127.0.0.1'
+const proxy_port = 8080
 
 describe('communication', () => {
 
@@ -81,6 +90,54 @@ describe('communication', () => {
     it('does not have credentials', () => {
 
     })
+
+  })
+
+  describe('local request', () => {
+    var local_run: boolean
+
+    // test if local dynamo is working
+    before(() => {
+      local_run = false
+      let socket = new net.Socket()
+      socket.setTimeout(2000, () => socket.destroy())
+      socket.connect(local_DB_port, local_DB_host)
+      socket.on('data', () => {
+        local_run = true
+      })
+    })
+    
+    it('gets a response from the database', () => {
+      if(local_run) {
+        console.warn('Could not find local db')
+        return
+      }
+      let comms = new Communications({
+        host: 'http://127.0.0.1:200'
+      })
+    })
+
+    describe('test proxy', () => {
+      var proxy_run: boolean
+      // test if the proxy is working
+      before(() => {
+        proxy_run = false
+        let socket = new net.Socket()
+        socket.setTimeout(2000, () => socket.destroy())
+        socket.connect(local_DB_port, local_DB_host)
+        socket.on('data', () => {
+          proxy_run = true
+        })
+        proxy_run = proxy_run && local_run
+      })
+
+      
+
+    })
+
+  })
+
+  describe('online request', () => {
 
   })
 

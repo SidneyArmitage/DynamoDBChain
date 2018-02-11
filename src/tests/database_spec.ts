@@ -4,7 +4,7 @@ import { expect } from 'chai'
 describe('Database', () => {
 
   it('initializes when given the correct values', () => {
-    let db = new Database()
+    let db = new Database({})
   })
 
   describe('Methods return', () => {
