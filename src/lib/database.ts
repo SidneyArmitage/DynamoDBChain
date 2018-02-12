@@ -1,7 +1,10 @@
-import { IDatabaseOptions } from './communication'
+import { ICommunicationOptions } from './communication'
 
 export class Database {
-  constructor (options: IDatabaseOptions) {
+
+
+  
+  constructor (options: ICommunicationOptions) {
 
   }
 

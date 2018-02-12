@@ -50,15 +50,30 @@ export class Communications {
       this.isHTTPs = options.host.match(/https\:\/\//) !== null
       let host = options
         .host
-        .substring(this.isHTTPs ? 8 : 7, options.host.length)
+        .substring(this.isHTTPs ? 8 : 7, options.host.length),
+      next = host.match(/\:|\//) as RegExpMatchArray
+      // determine host here
       this.options.host = 
-        host.indexOf('/')  != -1 ? 
-          host.substr(0, host.indexOf('/')) : 
+        next != null ? 
+          host.substr(0, host.indexOf((next)[0])) : 
           host
-      this.options.path = 
-        host.indexOf('/')  != -1 ? 
-          host.substring(host.indexOf('/'), host.length) :
-          '/'
+      // determine port here
+      if(host.indexOf(':') != -1){
+        let end = host.indexOf('/')
+        end = end !== -1 ? end : host.length
+        this.options.port = 
+          Number
+            .parseInt(host.substring(
+              host.indexOf(':') + 1,
+              end))
+        }
+      // determine path here
+      if(host.indexOf('/') != -1) {
+        this.options.path = 
+            host.substring(host.indexOf('/'), host.length)
+      } else {
+        this.options.path = '/'
+      }
     }else{
       this.isHTTPs = true
       this.options.host = 
@@ -74,11 +89,15 @@ export class Communications {
     this.options.headers['Content-Type'] = 'application/x-amz-json-1.0'
   }
 
-  public getHost() {
+  public getPort(): number | null{
+    return this.options.port || null
+  }
+
+  public getHost(): string {
     return this.options.host
   }
 
-  public getPath() {
+  public getPath(): string {
     return this.options.path
   }
 

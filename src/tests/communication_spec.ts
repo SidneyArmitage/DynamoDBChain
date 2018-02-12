@@ -16,56 +16,101 @@ describe('communication', () => {
     
     it('has a string host and HTTP', () => {
       let comms = new communication.Communications({
-        host: 'http://127.0.0.1:200'
+        host: 'http://127.0.0.1'
       })
       expect(comms.getHost())
         .to
-        .equal('127.0.0.1:200')
+        .equal('127.0.0.1')
       expect(comms.getIsHTTPs())
         .to
         .equal(false)
+      expect(comms.getPort())
+        .to
+        .equal(null)
     })
 
     it('has a string host and HTTPS', () => {
       let comms = new communication.Communications({
-        host: 'https://127.0.0.1:200'
+        host: 'https://127.0.0.1'
       })
       expect(comms.getHost())
         .to
-        .equal('127.0.0.1:200')
+        .equal('127.0.0.1')
         expect(comms.getIsHTTPs())
           .to
           .equal(true)
+        expect(comms.getPort())
+          .to
+          .equal(null)
     })
 
-    it('has a string host with empty path and HTTP', () => {
+    it('has a string host and a port', () => {
       let comms = new communication.Communications({
-        host: 'http://127.0.0.1:200/'
+        host: 'http://127.0.0.1:200'
       })
       expect(comms.getHost())
         .to
-        .equal('127.0.0.1:200')
+        .equal('127.0.0.1')
       expect(comms.getIsHTTPs())
         .to
         .equal(false)
-      expect(comms.getPath())
+      expect(comms.getPort())
         .to
-        .equal('/')
+        .equal(200)
     })
 
-    it('has a string host with custom path and HTTP', () => {
+    it('has a string host, a port and a path', () => {
       let comms = new communication.Communications({
         host: 'http://127.0.0.1:200/boo'
       })
       expect(comms.getHost())
         .to
-        .equal('127.0.0.1:200')
+        .equal('127.0.0.1')
       expect(comms.getIsHTTPs())
         .to
         .equal(false)
       expect(comms.getPath())
         .to
         .equal('/boo')
+      expect(comms.getPort())
+        .to
+        .equal(200)
+    })
+
+    it('has a string host with empty path and HTTP', () => {
+      let comms = new communication.Communications({
+        host: 'http://127.0.0.1/'
+      })
+      expect(comms.getHost())
+        .to
+        .equal('127.0.0.1')
+      expect(comms.getIsHTTPs())
+        .to
+        .equal(false)
+      expect(comms.getPath())
+        .to
+        .equal('/')
+      expect(comms.getPort())
+        .to
+        .equal(null)
+    })
+
+    it('has a string host with custom path and HTTP', () => {
+      let comms = new communication.Communications({
+        host: 'http://127.0.0.1/boo'
+      })
+      expect(comms.getHost())
+        .to
+        .equal('127.0.0.1')
+      expect(comms.getIsHTTPs())
+        .to
+        .equal(false)
+      expect(comms.getPath())
+        .to
+        .equal('/boo')
+      expect(comms.getPort())
+        .to
+        .equal(null)
     })
 
     it('has an IHost', () => {
@@ -81,6 +126,12 @@ describe('communication', () => {
       expect(comms.getIsHTTPs())
         .to
         .equal(true)
+      expect(comms.getPath())
+        .to
+        .equal('/')
+      expect(comms.getPort())
+        .to
+        .equal(null)
     })
 
     it('has credentials', () => {
