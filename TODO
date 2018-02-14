@@ -8,22 +8,26 @@ Base_query:
   contains:
     ☐ communication
     ☐ table name
+  methods:
+    ☐ getRaw
+    ☐ setRaw
+    ☐ execute
 
 Querying Methods:
-☐ Execute
-☐ ExecuteLimit
+  ☐ ExecuteLimit
 
 Communication:
-☐ build
-☐ setup
-☐ request reject
-☐ complete request and return JSON object
-☐ proxy
-☐ add port
+  ✔ build @done(18-02-14 17:33)
+  ✔ setup @done(18-02-14 17:33)
+  ✔ request reject @done(18-02-14 17:33)
+  ✔ complete request and return JSON object @done(18-02-14 17:33)
+  ☐ proxy
+  ✔ add port @done(18-02-14 17:34)
+  ☐ works with online dynamo
 
 Tests:
-☐ run only if dynamo is running
-☐ run only if proxy is running
+  ✔ run only if dynamo is running @done(18-02-14 17:36)
+  ☐ run only if proxy is running
 
 Database Major features:
   ☐ BatchGetItem

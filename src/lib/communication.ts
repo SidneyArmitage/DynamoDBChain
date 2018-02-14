@@ -85,7 +85,6 @@ export class Communications {
       this.options.path = '/'
     }
     this.options.method = options.method ? options.method : 'POST'
-    this.options.body = '{}'
     this.options.headers['Content-Type'] = 'application/x-amz-json-1.0'
   }
 
@@ -105,23 +104,31 @@ export class Communications {
     return this.isHTTPs
   }
 
-  public request(operation: string, data: JSON): Promise<JSON>{
+  public request(operation: string, data?: object): Promise<JSON>{
     this.options.headers['X-Amz-Target'] = 'DynamoDB_20120810.' + operation
     return new Promise<JSON>((resolve, reject) => {
-      this.options.body = JSON.stringify(data)
       let req: http.ClientRequest
-      aws4.sign(this.options)
+      let request = aws4.sign(this.options)
+      console.log(request)
       if (this.isHTTPs) {
-        req = http.request(this.options, (res) => {
+        req = http.request(request, (res) => {
+          console.log(res.headers)
           response(res, resolve, reject)
         })
       } else {
-        req = https.request(this.options, (res) => {
+        req = https.request(request, (res) => {
           response(res, resolve, reject)
         })
       }
 
-      req.on('error', reject)
+      req.on('error', (err) => {
+        console.error(err)
+        reject(err)
+      })
+
+      data ? req.write(JSON.stringify(data))
+           : req.write('')
+      req.end()
     })
   }
 
@@ -129,16 +136,18 @@ export class Communications {
 
 function response(res: http.IncomingMessage, resolve: (out: JSON) => void, reject: (out: any) => void) {
   let data = ''
-
   res.on('data', (chunk) => {
     data += chunk
+    console.log('recieved:', chunk)
   })
 
   res.on('end', ()  => {
     try {
+      console.log(data)
       resolve(JSON.parse(data))
     } catch(error) {
       reject(error)
     }
   })
+  console.log(res.headers)
 }

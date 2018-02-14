@@ -148,25 +148,30 @@ describe('communication', () => {
     var local_run: boolean
 
     // test if local dynamo is working
-    before(() => {
+    before((done) =>  {
       local_run = false
       let socket = new net.Socket()
       socket.setTimeout(2000, () => socket.destroy())
       socket.connect(local_DB_port, local_DB_host)
       socket.on('data', () => {
         local_run = true
+        done()
       })
     })
     
-    it('gets a response from the database', () => {
-      if(local_run) {
-        console.warn('Could not find local db')
-        return
-      }
+    it('gets a response from the database', (done) => {
       let comms = new Communications({
-        host: 'http://127.0.0.1:200'
+        host: 'https://127.0.0.1:8000',
+        awsCredentials: {
+          accessKeyId: 'fakeAccesKeyID',
+          secretAccessKey: 'FakeSecretKey'
+        }
       })
-    })
+      comms.request('ListTables', {})
+        .then((o) => console.log('done:', o))
+        .then(() => done())
+        .catch(done)
+    }).timeout(10000)
 
     describe('test proxy', () => {
       var proxy_run: boolean
