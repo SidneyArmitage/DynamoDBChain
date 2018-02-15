@@ -104,15 +104,14 @@ export class Communications {
     return this.isHTTPs
   }
 
-  public request(operation: string, data?: object): Promise<JSON>{
+  public request(operation: string, data?: object): Promise<object>{
     this.options.headers['X-Amz-Target'] = 'DynamoDB_20120810.' + operation
-    return new Promise<JSON>((resolve, reject) => {
+    return new Promise<object>((resolve, reject) => {
       let req: http.ClientRequest
       let request = aws4.sign(this.options)
       console.log(request)
       if (this.isHTTPs) {
         req = http.request(request, (res) => {
-          console.log(res.headers)
           response(res, resolve, reject)
         })
       } else {
@@ -134,20 +133,17 @@ export class Communications {
 
 }
 
-function response(res: http.IncomingMessage, resolve: (out: JSON) => void, reject: (out: any) => void) {
+function response(res: http.IncomingMessage, resolve: (out: object) => void, reject: (out: any) => void) {
   let data = ''
   res.on('data', (chunk) => {
     data += chunk
-    console.log('recieved:', chunk)
   })
 
   res.on('end', ()  => {
     try {
-      console.log(data)
       resolve(JSON.parse(data))
     } catch(error) {
       reject(error)
     }
   })
-  console.log(res.headers)
 }
