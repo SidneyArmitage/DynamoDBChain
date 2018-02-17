@@ -26,7 +26,6 @@ export interface IHost {
 export interface ICommunicationOptions {
   awsCredentials?: IawsCredentials
   host: string | IHost
-  method?: string
 }
 
 interface IAwsOptions {
@@ -85,7 +84,7 @@ export class Communications {
 //      this.options.path = '/'
     }
     this.credentials = options.awsCredentials
-    this.options.method = options.method ? options.method : 'POST'
+    this.options.method = 'POST'
     this.options.headers['Content-Type'] = 'application/x-amz-json-1.0'
     this.options.headers['User-Agent'] = 'NodeJS'
   }

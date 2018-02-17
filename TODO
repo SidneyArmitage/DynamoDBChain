@@ -10,9 +10,24 @@ Base_query:
     ☐ table name
   methods:
     ☐ getRaw
-    ☐ setRaw
     ☐ execute
-    ☐ setDataType
+    ☐ handle defined data types
+    Detect Data Type:
+      ☐ String - S
+      ☐ Number - N
+      ☐ Binary - B
+      ☐ Boolean - BOOL
+      ☐ Null - NULL
+      ☐ Map - M
+      ☐ List - L
+      ☐ String Set - SS
+      ☐ Number Set - NS
+      ☐ Binary Set - BS
+
+    setRaw:
+      ☐ setRaw JSON
+      ☐ setRaw String
+      ☐ illegal values
 
 Querying Methods:
   ☐ ExecuteLimit
@@ -25,10 +40,6 @@ Communication:
   ☐ proxy
   ✔ add port @done(18-02-14 17:34)
   ✔ works with online dynamo @done(18-02-17 18:47)
-
-Tests:
-  ✔ run only if dynamo is running @done(18-02-14 17:36)
-  ☐ run only if proxy is running
 
 Database Major features:
   ☐ BatchGetItem
