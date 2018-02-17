@@ -24,7 +24,7 @@ Communication:
   ✔ complete request and return JSON object @done(18-02-14 17:33)
   ☐ proxy
   ✔ add port @done(18-02-14 17:34)
-  ☐ works with online dynamo
+  ✔ works with online dynamo @done(18-02-17 18:47)
 
 Tests:
   ✔ run only if dynamo is running @done(18-02-14 17:36)
