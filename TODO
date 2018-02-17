@@ -2,7 +2,7 @@ Database:
   ☐ proxy
   ✔ endpoint @done(18-02-10 16:13)
   ☐ add communication class
-  ☐ auth
+  ✔ auth @done(18-02-17 15:17)
 
 Base_query:
   contains:
@@ -12,6 +12,7 @@ Base_query:
     ☐ getRaw
     ☐ setRaw
     ☐ execute
+    ☐ setDataType
 
 Querying Methods:
   ☐ ExecuteLimit
