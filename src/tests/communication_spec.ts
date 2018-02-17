@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 import * as http from 'http'
 import * as net from 'net'
-import * as communication from '../lib/communication'
-import { Communications } from '../lib/communication';
+import { Communications , IawsCredentials, IHost} from '../lib/communication'
+import * as settings from '../test_settings.json'
 
 const local_DB_host = '127.0.0.1'
 const local_DB_port = 8000
@@ -15,7 +15,7 @@ describe('communication', () => {
   describe('constructor', () => {
     
     it('has a string host and HTTP', () => {
-      let comms = new communication.Communications({
+      let comms = new Communications({
         host: 'http://127.0.0.1'
       })
       expect(comms.getHost())
@@ -30,7 +30,7 @@ describe('communication', () => {
     })
 
     it('has a string host and HTTPS', () => {
-      let comms = new communication.Communications({
+      let comms = new Communications({
         host: 'https://127.0.0.1'
       })
       expect(comms.getHost())
@@ -45,7 +45,7 @@ describe('communication', () => {
     })
 
     it('has a string host and a port', () => {
-      let comms = new communication.Communications({
+      let comms = new Communications({
         host: 'http://127.0.0.1:200'
       })
       expect(comms.getHost())
@@ -60,7 +60,7 @@ describe('communication', () => {
     })
 
     it('has a string host, a port and a path', () => {
-      let comms = new communication.Communications({
+      let comms = new Communications({
         host: 'http://127.0.0.1:200/boo'
       })
       expect(comms.getHost())
@@ -78,7 +78,7 @@ describe('communication', () => {
     })
 
     it('has a string host with empty path and HTTP', () => {
-      let comms = new communication.Communications({
+      let comms = new Communications({
         host: 'http://127.0.0.1/'
       })
       expect(comms.getHost())
@@ -96,7 +96,7 @@ describe('communication', () => {
     })
 
     it('has a string host with custom path and HTTP', () => {
-      let comms = new communication.Communications({
+      let comms = new Communications({
         host: 'http://127.0.0.1/boo'
       })
       expect(comms.getHost())
@@ -114,7 +114,7 @@ describe('communication', () => {
     })
 
     it('has an IHost', () => {
-      let comms = new communication.Communications({
+      let comms = new Communications({
         host: {
           region: 'test',
           domain: 'testing'
@@ -122,7 +122,7 @@ describe('communication', () => {
       })
       expect(comms.getHost())
         .to
-        .equal('dynamodb.test.testing')
+        .equal(undefined)
       expect(comms.getIsHTTPs())
         .to
         .equal(true)
@@ -185,15 +185,33 @@ describe('communication', () => {
           proxy_run = true
         })
         proxy_run = proxy_run && local_run
-      })
-
-      
+      })      
 
     })
 
   })
 
   describe('online request', () => {
+
+    var awsCredentials: IawsCredentials,
+    host: IHost
+
+    before(() => {
+      awsCredentials = (settings as any).credentials
+      host = (settings as any).host
+    })
+
+    it('gets a response from the database', (done) => {
+      let comms = new Communications({
+        host: host,
+        awsCredentials: awsCredentials
+      })
+      console.log('token:', comms)
+      console.log()
+      comms.request('ListTables', {})
+        .then(() => done())
+        .catch(done)
+    }).timeout(50000)
 
   })
 

@@ -15,6 +15,7 @@ const service = 'dynamodb'
 export interface IawsCredentials {
   accessKeyId: string
   secretAccessKey: string
+  sessionToken?: string
 }
 
 export interface IHost {
@@ -29,7 +30,9 @@ export interface ICommunicationOptions {
 }
 
 interface IAwsOptions {
-  host: string
+  host?: string
+  service?:string
+  region?:string
   path: string
   port: number
   method: string
@@ -41,6 +44,7 @@ export class Communications {
 
   private options: IAwsOptions
   private isHTTPs: boolean
+  private credentials?: IawsCredentials
 
   constructor (options: ICommunicationOptions) {
     this.options = {
@@ -76,23 +80,20 @@ export class Communications {
       }
     }else{
       this.isHTTPs = true
-      this.options.host = 
-        service + 
-        '.' +
-        options.host.region + 
-        '.' + 
-        options.host.domain
-      this.options.path = '/'
+      this.options.service = service 
+      this.options.region = options.host.region
+//      this.options.path = '/'
     }
+    this.credentials = options.awsCredentials
     this.options.method = options.method ? options.method : 'POST'
     this.options.headers['Content-Type'] = 'application/x-amz-json-1.0'
+    this.options.headers['User-Agent'] = 'NodeJS'
   }
-
   public getPort(): number | null{
     return this.options.port || null
   }
 
-  public getHost(): string {
+  public getHost(): string | undefined {
     return this.options.host
   }
 
@@ -105,28 +106,33 @@ export class Communications {
   }
 
   public request(operation: string, data?: object): Promise<object>{
-    this.options.headers['X-Amz-Target'] = 'DynamoDB_20120810.' + operation
     return new Promise<object>((resolve, reject) => {
       let req: http.ClientRequest
-      let request = aws4.sign(this.options)
-      console.log(request)
+      let body = JSON.stringify(data)
+      this.options.body = body
+      this.options.headers['X-Amz-Target'] = 'DynamoDB_20120810.' + operation
+//      console.log('options:', this.options)
+//      console.log()
+      let request = aws4.sign(this.options, this.credentials)
+//      console.log('request:', request)
       if (this.isHTTPs) {
-        req = http.request(request, (res) => {
+        req = https.request(request, (res) => {
+//          console.log(res.headers)
+          res.pipe(process.stdout)
           response(res, resolve, reject)
         })
       } else {
-        req = https.request(request, (res) => {
+        req = http.request(request, (res) => {
+//          console.log(res.headers)
+          res.pipe(process.stdout)
           response(res, resolve, reject)
         })
       }
 
       req.on('error', (err) => {
-        console.error(err)
         reject(err)
       })
-
-      data ? req.write(JSON.stringify(data))
-           : req.write('')
+      req.write(body)
       req.end()
     })
   }
