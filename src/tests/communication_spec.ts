@@ -122,7 +122,7 @@ describe('communication', () => {
       })
       expect(comms.getHost())
         .to
-        .equal('dynamodb.test.testing')
+        .equal(undefined)
       expect(comms.getIsHTTPs())
         .to
         .equal(true)
