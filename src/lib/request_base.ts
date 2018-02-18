@@ -4,6 +4,23 @@ export interface IParams {
   [name: string]: any
 }
 
+interface IDatatype {
+  B?: any
+  BOOL?: boolean
+  BS?: [any]
+  L?: [IDatatype] //TODO: Not sure - needs investigation
+  M?: [IDatatype] //TODO: Not sure - needs investigation
+  N?: string
+  NS?: [string]
+  NULL?: boolean
+  S?: string
+  SS?: string
+}
+
+function detectDataType(data: any):IDatatype {
+  return {}
+}
+
 export class Request_base {
 
   private communication: Communications

@@ -5,13 +5,28 @@ Database:
   ✔ auth @done(18-02-17 15:17)
 
 Base_query:
-  contains:
+
+  Contains:
     ☐ communication
     ☐ table name
-  methods:
+
+  Methods:
     ☐ getRaw
     ☐ execute
     ☐ handle defined data types
+
+    Parse Data Type (response):
+      ☐ String - S
+      ☐ Number - N
+      ☐ Binary - B
+      ☐ Boolean - BOOL
+      ☐ Null - NULL
+      ☐ Map - M
+      ☐ List - L
+      ☐ String Set - SS
+      ☐ Number Set - NS
+      ☐ Binary Set - BS
+
     Detect Data Type:
       ☐ String - S
       ☐ Number - N
