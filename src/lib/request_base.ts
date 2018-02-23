@@ -4,21 +4,54 @@ export interface IParams {
   [name: string]: any
 }
 
-interface IDatatype {
-  B?: any
-  BOOL?: boolean
-  BS?: [any]
-  L?: [IDatatype] //TODO: Not sure - needs investigation
-  M?: [IDatatype] //TODO: Not sure - needs investigation
-  N?: string
-  NS?: [string]
-  NULL?: boolean
-  S?: string
-  SS?: string
+interface IAttributeMap {
+  [name: string]: IDatatype
 }
 
-function detectDataType(data: any):IDatatype {
-  return {}
+interface IDatatype {
+  B?: string
+  BOOL?: boolean
+  BS?: [string] | never[]
+  L?: [any] | never[] //TODO: Not sure - needs investigation
+  M?: IAttributeMap //TODO: Not sure - needs investigation
+  N?: string
+  NS?: [string] | never[]
+  NULL?: boolean
+  S?: string
+  SS?: string | never[]
+}
+
+function detectArrayType (array: Array<any>): IDatatype{
+  if(array.length === 0) {
+    return {L: []}
+  }
+  var specified = typeof array[0]
+  var isList = false
+  array.every((element) => {
+    if(isList === true) {
+      return false
+    }
+    if(typeof element === specified) {
+      return true
+    }else {
+      isList = true
+      return false
+    }
+  })
+  return isList ? {L: array}
+       : specified === 'string' ? {SS: array}
+       :                          {L: array}
+}
+
+function detectDataType(data: any):IDatatype | Error {
+  let dataType: string = typeof data
+  return dataType === 'boolean'     ? {BOOL: data}
+       : dataType === 'string'      ? {S: data}
+       : dataType === 'number'      ? {N: data.toString()}
+       : data == null               ? {NULL: true}
+       : Array.isArray(data)        ? detectArrayType(data)
+       : dataType === 'object'      ? {M: data}
+       : Error('Unknown datatype: ' + dataType)
 }
 
 export class Request_base {
