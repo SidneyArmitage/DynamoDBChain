@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "pretest": "",
-    "test": "mocha -r ts-node/register ./src/tests/*.ts",
+    "test": "mocha -r ts-node/register ./src/tests/*.spec.ts",
     "posttest": ""
   },
   "author": "Sidney Armitage",
